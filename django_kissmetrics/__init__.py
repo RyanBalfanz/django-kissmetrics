@@ -4,7 +4,7 @@ from logging import getLogger
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 
-from django_kissmetrics import settings
+from django_kissmetrics import models, settings
 
 SESSION_KEY_KISSMETRICS = 'kissmetrics_tasks'
 
@@ -54,13 +54,26 @@ class KMWrapper(KM):
         log.info('Recording KM event `%s` with props=%s' % (action, props,))
         super(KMWrapper, self).record(action, props)
 
+    def request(self, type, data, update=True):
+        if settings.KISSMETRICS_TRACK_INTERNALLY:
+            kissmetric = models.Events(
+                data=data,
+                identity=self._id,
+                type=models.KISSMETRICS_TYPE_CHOICES.KISS_TYPE[type],
+            )
+
+            if 'e' == type:
+                kissmetric.action=data['_n']
+
+            kissmetric.save()
+        super(KMWrapper, self).request(type, data, update)
+
 class KMMock(KMWrapper):
     '''
     A mock class used to prevent the recording of KISS events for some users.
     '''
 
-    @classmethod
-    def request(cls, type, data, update=True):
+    def request(self, type, data, update=True):
         pass
 
 def get_kissmetrics_instance(user_or_request):
