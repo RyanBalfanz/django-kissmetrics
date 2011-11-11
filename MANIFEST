@@ -1,0 +1,5 @@
+README
+setup.py
+django_kissmetrics/__init__.py
+django_kissmetrics/settings.py
+django_kissmetrics/tests.py
