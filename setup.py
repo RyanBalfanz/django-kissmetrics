@@ -88,8 +88,8 @@ class QuickRunTests(RunTests):
     extra_env = dict(SKIP_RLIMITS=1, QUICKTEST=1)
 
 
-if os.path.exists("README"):
-    long_description = codecs.open("README", "r", "utf-8").read()
+if os.path.exists("README.rst"):
+    long_description = codecs.open("README.rst", "r", "utf-8").read()
 else:
     long_description = "See https://github.com/votizen/django-kissmetrics"
 
