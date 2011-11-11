@@ -3,6 +3,11 @@ template, "django_kissmetrics/kissmetrics.html", that can be included in any HTM
 you want to use client-side tracking. Queued tasks are used to store server-side events for client-side
 recording; use this for tracking events before the kissmetrics JavaScript has been loaded.
 
+Requires that you install kissmetrics first::
+
+https://github.com/kissmetrics/KISSmetrics
+
+
 In your settings.py please include::
 
 KISSMETRICS_API_KEY = '{YOUR_KISSMETRICS_API_KEY}'
