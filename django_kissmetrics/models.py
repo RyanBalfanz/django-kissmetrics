@@ -1,6 +1,7 @@
 from base64 import encodestring, decodestring
 from simplejson import loads, dumps
 
+from django.contrib.auth.models import User
 from django.db import models
 
 class KISSMETRICS_TYPE_CHOICES():
@@ -29,6 +30,7 @@ class Events(models.Model):
     _data = models.TextField(db_column='data', blank=True)
     identity = models.CharField(max_length=64, help_text="The type of KISS identity.")
     type = models.CharField(max_length=12, choices=KISSMETRICS_TYPE_CHOICES.CHOICES, help_text="The type of KISS action.")
+    user = models.ForeignKey(User, null=True, help_text='If the user was determined for this identity, then set it')
 
     def set_data(self, data):
         self._data = encodestring(dumps(data))

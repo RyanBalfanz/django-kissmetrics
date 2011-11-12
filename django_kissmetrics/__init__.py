@@ -76,6 +76,12 @@ class KMMock(KMWrapper):
     def request(self, type, data, update=True):
         pass
 
+def get_identity_from_cookie(request):
+    '''
+    Attempts to find the KISS identity from the COOKIEs.
+    '''
+    return request.COOKIES.get('km_ni', '') or request.COOKIES.get('km_ai', '')
+
 def get_kissmetrics_instance(user_or_request):
     '''
     Creates a kiss instance using a Django request or auth user object.
@@ -90,7 +96,7 @@ def get_kissmetrics_instance(user_or_request):
             user = user_or_request
             indentity = user_or_request.id
         else:
-            indentity = user_or_request.COOKIES.get('km_ni', '') or user_or_request.COOKIES.get('km_ai', '')
+            indentity = get_identity_from_cookie(user_or_request)
     elif isinstance(user_or_request, User):
         user = user_or_request
         indentity = user_or_request.id

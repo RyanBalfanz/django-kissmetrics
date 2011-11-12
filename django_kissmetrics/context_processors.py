@@ -1,6 +1,4 @@
-from django.conf import settings
-
-from django_kissmetrics import SESSION_KEY_KISSMETRICS
+from django_kissmetrics import models, settings, SESSION_KEY_KISSMETRICS, get_identity_from_cookie
 
 def kissmetrics(request):
     """Set some upvote template variables that are expected on all requests"""
@@ -12,8 +10,8 @@ def kissmetrics(request):
     if 'GET' == request.method:
         meta = request.META or {}
         path = meta.get('PATH_INFO', '')
-        is_path_media_url = getattr(settings, 'MEDIA_URL', False) and settings.MEDIA_URL in path
-        is_path_static_url = getattr(settings, 'STATIC_URL', False) and settings.STATIC_URL in path
+        is_path_media_url = settings.MEDIA_URL and settings.MEDIA_URL in path
+        is_path_static_url = settings.STATIC_URL and settings.STATIC_URL in path
         ignored_path = not path or 'favicon' in path or is_path_media_url or is_path_static_url or '__debug__/' in path
 
         # don't attempt to record if not a real page or skip_kiss is set
@@ -25,6 +23,11 @@ def kissmetrics(request):
             if is_authenticated and not request.session.get('identify_kiss'):
                 identify_kiss = True
                 request.session['identify_kiss'] = True
+
+                # associate the user with the KISS identity
+                if settings.KISSMETRICS_TRACK_INTERNALLY:
+                    identity = get_identity_from_cookie(request)
+                    models.Events.objects.filter(identity=identity).update(user=user)
 
     return {
         'identify_kiss': identify_kiss,
