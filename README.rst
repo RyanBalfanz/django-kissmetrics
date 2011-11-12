@@ -18,7 +18,7 @@ For server-side tracking::
     from django.contrib.auth.models import User
     from django_kissmetrics import get_kissmetrics_instance
 
-user = User.objects.get(id=1)
+    user = User.objects.get(id=1)
 
     # pass in a django user object
     km_inst = get_kissmetrics_instance(user)
