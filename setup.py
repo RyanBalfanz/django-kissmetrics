@@ -4,12 +4,13 @@ import os
 import sys
 import codecs
 
-try:
-    from setuptools import setup, Command
-except ImportError:
-    from ez_setup import use_setuptools
-    use_setuptools()
-    from setuptools import setup, Command  # noqa
+#try:
+#    from setuptools import setup, Command
+#except ImportError:
+#    from ez_setup import use_setuptools
+#    use_setuptools()
+#    from setuptools import setup, Command  # noqa
+from distutils.core import setup, Command
 from distutils.command.install import INSTALL_SCHEMES
 
 packages, data_files = [], []
