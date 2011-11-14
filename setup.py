@@ -97,7 +97,7 @@ setup(
     name = 'django-kissmetrics',
     packages = packages,
     data_files = data_files,
-    version = '0.2.0',
+    version = '0.2.2',
     description = 'Tool for working with KISSmetrics in Django.',
     long_description = long_description,
     url = 'http://github.com/votizen/django-kissmetrics',
