@@ -4,53 +4,15 @@ import os
 import sys
 import codecs
 
-#try:
-#    from setuptools import setup, Command
-#except ImportError:
-#    from ez_setup import use_setuptools
-#    use_setuptools()
-#    from setuptools import setup, Command  # noqa
-from distutils.core import setup, Command
+try:
+    from setuptools import setup, Command, find_packages
+except ImportError:
+    from ez_setup import use_setuptools
+    use_setuptools()
+    from setuptools import setup, Command, find_packages  # noqa
 from distutils.command.install import INSTALL_SCHEMES
 
-packages, data_files = [], []
-root_dir = os.path.dirname(__file__)
-if root_dir != '':
-    os.chdir(root_dir)
 src_dir = "django_kissmetrics"
-
-def fullsplit(path, result=None):
-    if result is None:
-        result = []
-    head, tail = os.path.split(path)
-    if head == '':
-        return [tail] + result
-    if head == path:
-        return result
-    return fullsplit(head, [tail] + result)
-
-SKIP_EXTENSIONS = [".pyc", ".pyo", ".swp", ".swo"]
-
-
-def is_unwanted_file(filename):
-    for skip_ext in SKIP_EXTENSIONS:
-        if filename.endswith(skip_ext):
-            return True
-    return False
-
-for dirpath, dirnames, filenames in os.walk(src_dir):
-    # Ignore dirnames that start with '.'
-    for i, dirname in enumerate(dirnames):
-        if dirname.startswith("."):
-            del dirnames[i]
-    for filename in filenames:
-        if filename.endswith(".py") or filename.endswith(".html"):
-            packages.append('.'.join(fullsplit(dirpath)))
-        elif is_unwanted_file(filename):
-            pass
-        else:
-            data_files.append([dirpath, [os.path.join(dirpath, f) for f in
-                filenames]])
 
 class RunTests(Command):
     description = "Run the django test suite from the tests dir."
@@ -88,7 +50,6 @@ class RunTests(Command):
 class QuickRunTests(RunTests):
     extra_env = dict(SKIP_RLIMITS=1, QUICKTEST=1)
 
-
 if os.path.exists("README.rst"):
     long_description = codecs.open("README.rst", "r", "utf-8").read()
 else:
@@ -96,8 +57,7 @@ else:
 
 setup(
     name = 'django-kissmetrics',
-    packages = packages,
-    data_files = data_files,
+    packages=find_packages(),
     version = '0.2.2',
     description = 'Tool for working with KISSmetrics in Django.',
     long_description = long_description,
@@ -112,6 +72,7 @@ setup(
         "test": RunTests,
         "quicktest": QuickRunTests
     },
+    include_package_data=True,
     platforms=["any"],
     classifiers=[
         'Programming Language :: Python',
