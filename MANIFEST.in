@@ -1,3 +1,2 @@
-include setup.py README MANIFEST.in
+include setup.py README.rst MANIFEST.in
 recursive-include django_kissmetrics/templates *
-global-exclude *~
