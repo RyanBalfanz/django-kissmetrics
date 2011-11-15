@@ -10,6 +10,8 @@ SESSION_KEY_KISSMETRICS = 'kissmetrics_tasks'
 
 log = getLogger('django_kissmetrics')
 
+__version__ = (0, 2, 3)
+
 class KISSMetricTask(object):
     '''
     Data class used to store server-side KISS events that need to be included on the next page load.

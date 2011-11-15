@@ -1,19 +1,6 @@
+{% include 'django_kissmetrics/kissmetrics_basic.html' %}
 <script type="text/javascript">
-    var _kmq = _kmq || [];
     {% if not user.kissmetrics_ignore %}
-        function _kms(u) {
-            setTimeout(function() {
-                var s = document.createElement('script');
-                var f = document.getElementsByTagName('script')[0];
-                s.type = 'text/javascript';
-                s.async = true;
-                s.src = u;
-                f.parentNode.insertBefore(s, f);
-            }, 1);
-        }
-        _kms('//i.kissmetrics.com/i.js');
-        _kms('//doug1izaerwt3.cloudfront.net/{{ settings.KISSMETRICS_API_KEY }}.1.js');
-
         {% if user.is_authenticated and identify_kiss %}
         _kmq.push(['identify', '{{ user.pk }}']);
         _kmq.push(['set', {'user_id':{{ user.pk }}, 'name' : '{{user.get_full_name}}'}]);

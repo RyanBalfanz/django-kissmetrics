@@ -58,7 +58,8 @@ else:
 setup(
     name = 'django-kissmetrics',
     packages=find_packages(),
-    version = '0.2.2',
+#    version='.'.join(map(str, __import__('django_kissmetrics').__version__)),
+    version='0.2.3',
     description = 'Tool for working with KISSmetrics in Django.',
     long_description = long_description,
     url = 'http://github.com/votizen/django-kissmetrics',
