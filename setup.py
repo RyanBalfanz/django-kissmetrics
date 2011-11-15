@@ -44,7 +44,7 @@ for dirpath, dirnames, filenames in os.walk(src_dir):
         if dirname.startswith("."):
             del dirnames[i]
     for filename in filenames:
-        if filename.endswith(".py"):
+        if filename.endswith(".py") or filename.endswith(".html"):
             packages.append('.'.join(fullsplit(dirpath)))
         elif is_unwanted_file(filename):
             pass
