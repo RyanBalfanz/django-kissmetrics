@@ -64,6 +64,11 @@ class KMWrapper(KM):
                 type=models.KISSMETRICS_TYPE_CHOICES.KISS_TYPE[type],
             )
 
+            user = getattr(self, 'user')
+
+            if user:
+                kissmetric.user = user
+
             if 'e' == type:
                 kissmetric.action=data['_n']
 
@@ -114,6 +119,7 @@ def get_kissmetrics_instance(user_or_request):
     else:
         km = KMWrapper(settings.KISSMETRICS_API_KEY)
 
+    km.user = user
     km.identify(indentity)
     return km
 
