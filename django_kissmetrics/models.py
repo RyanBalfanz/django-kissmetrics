@@ -1,4 +1,5 @@
 from base64 import encodestring, decodestring
+from datetime import datetime
 from simplejson import loads, dumps
 
 from django.contrib.auth.models import User
@@ -27,6 +28,7 @@ class Events(models.Model):
     This class it used to store kiss metric data.
     '''
     action = models.CharField(max_length=64, blank=True, help_text="When event is record, break out the action for querying.")
+    create_ts = models.DateTimeField(default=datetime.now)
     _data = models.TextField(db_column='data', blank=True)
     identity = models.CharField(max_length=64, help_text="The type of KISS identity.")
     type = models.CharField(max_length=12, choices=KISSMETRICS_TYPE_CHOICES.CHOICES, help_text="The type of KISS action.")

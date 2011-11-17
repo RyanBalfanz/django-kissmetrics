@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test.client import Client
 from django.utils.unittest.case import TestCase
 
-from django_kissmetrics import KISSMetricTask, KMWrapper, KMMock, get_kissmetrics_instance, queue_kissmetrics_task
+from django_kissmetrics import base
 
 class MiscTestCase(TestCase):
 
@@ -26,19 +26,19 @@ class MiscTestCase(TestCase):
         client = Client()
         self.assertFalse(client.user.kissmetrics_ignore)
 
-        o = KISSMetricTask('identify', 'bob@bob.com')
+        o = base.KISSMetricTask('identify', 'bob@bob.com')
         self.assertEquals("_kmq.push(['identify','bob@bob.com']);", o.toJS())
 
-        o = KISSMetricTask('record', 'Viewed Homepage')
+        o = base.KISSMetricTask('record', 'Viewed Homepage')
         self.assertEquals("_kmq.push(['record','Viewed Homepage']);", o.toJS())
 
-        o = KISSMetricTask('record', 'Signed Up', {'Plan':'Pro', 'Amount':99.95})
+        o = base.KISSMetricTask('record', 'Signed Up', {'Plan':'Pro', 'Amount':99.95})
         self.assertEquals("_kmq.push(['record','Signed Up',{'Amount':'99.95','Plan':'Pro'}]);", o.toJS())
 
-        o = KISSMetricTask('set', None, {'gender':'male'})
+        o = base.KISSMetricTask('set', None, {'gender':'male'})
         self.assertEquals("_kmq.push(['set',{'gender':'male'}]);", o.toJS())
 
-#        o = KISSMetricTask('alias', 'bob', 'bob@bob.com')
+#        o = base.KISSMetricTask('alias', 'bob', 'bob@bob.com')
 #        self.assertEquals("_kmq.push(['alias', 'bob', 'bob@bob.com']);", o.toJS())
 
     def test_get_kissmetrics_instance(self):
@@ -46,14 +46,14 @@ class MiscTestCase(TestCase):
         km_ai = '1234'
         km_ni = 'asdf'
 
-        self.assertRaises(Exception, get_kissmetrics_instance, self.client)
+        self.assertRaises(Exception, base.get_kissmetrics_instance, self.client)
 
         self.client.COOKIES['km_ai'] = km_ai
         self.client.COOKIES['km_ni'] = km_ni
 
-        km = get_kissmetrics_instance(self.client)
+        km = base.get_kissmetrics_instance(self.client)
         self.assertEquals(km_ni, km._id)
 
         self.client.login(username=self.user.username, password=password)
-        km = get_kissmetrics_instance(self.client)
+        km = base.get_kissmetrics_instance(self.client)
         self.assertEquals(self.user.id, km._id)
