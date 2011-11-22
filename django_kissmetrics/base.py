@@ -51,7 +51,7 @@ class KMWrapper(KM):
         log.info('Recording KM event `%s` with props=%s' % (action, props,))
         super(KMWrapper, self).record(action, props)
 
-    def request(self, type, data, update=True):
+    def track_request(self, data, type):
         if settings.KISSMETRICS_TRACK_INTERNALLY:
             kissmetric = models.Events(
                 data=data,
@@ -68,6 +68,9 @@ class KMWrapper(KM):
                 kissmetric.action=data['_n']
 
             kissmetric.save()
+
+    def request(self, type, data, update=True):
+        self.track_request(data, type)
         super(KMWrapper, self).request(type, data, update)
 
 class KMMock(KMWrapper):
@@ -76,6 +79,7 @@ class KMMock(KMWrapper):
     '''
 
     def request(self, type, data, update=True):
+        self.track_request(data, type)
         pass
 
 def get_identity_from_cookie(request):
