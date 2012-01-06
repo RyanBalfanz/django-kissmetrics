@@ -2,6 +2,7 @@ from KISSmetrics import KM
 
 from django.contrib.auth.models import User
 from django.http import HttpRequest
+from django.utils.encoding import smart_str
 
 from django_kissmetrics import models, log, settings
 
@@ -70,8 +71,13 @@ class KMWrapper(KM):
             kissmetric.save()
 
     def request(self, type, data, update=True):
+        # we need to encode unicode data on its way out the door.
+        type = smart_str(type)
+        stringified = {}
+        for k,v in data.items():
+            stringified[smart_str(k)] = smart_str(v)
         self.track_request(data, type)
-        super(KMWrapper, self).request(type, data, update)
+        super(KMWrapper, self).request(type, stringified, update)
 
 class KMMock(KMWrapper):
     '''
