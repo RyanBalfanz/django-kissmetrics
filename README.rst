@@ -16,7 +16,7 @@ In your `settings.py` please include::
 For server-side tracking::
 
     from django.contrib.auth.models import User
-    from django_kissmetrics import get_kissmetrics_instance
+    from django_kissmetrics.base import get_kissmetrics_instance
 
     user = User.objects.get(id=1)
 
@@ -40,7 +40,7 @@ For client-side tracking::
 
 For server-side to client-side tracking::
 
-    from django_kissmetrics import KISSMetricTask, queue_kissmetrics_task
+    from django_kissmetrics.base import KISSMetricTask, queue_kissmetrics_task
 
     def my_view(request):
         o = KISSMetricTask('record', '{EVENT_NAME}', {OPTIONAL_EVENT_PROPERTIES})
@@ -64,3 +64,4 @@ Or you can turn off tracking for a single user by adding the following property 
     user = User.objects.get(id=1)
     user.kissmetrics_ignore = True
     get_kissmetrics_instance(user).record('this event will not record')
+
