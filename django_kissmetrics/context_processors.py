@@ -18,6 +18,11 @@ def kissmetrics(request):
         if not ignored_path and not  meta.get('skip_kiss'):
             kissmetrics_tasks = request.session.pop(base.SESSION_KEY_KISSMETRICS, None)
 
+            # track the delayed events internally
+            if kissmetrics_tasks and settings.KISSMETRICS_TRACK_INTERNALLY:
+                for kissmetric_task in kissmetrics_tasks:
+                    kissmetric_task.save(request)
+
             # don't identify, if already identified
             is_authenticated = user and user.is_authenticated()
             if is_authenticated and not request.session.get('identify_kiss'):
