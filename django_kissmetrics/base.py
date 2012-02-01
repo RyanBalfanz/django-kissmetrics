@@ -47,17 +47,18 @@ class KISSMetricTask(object):
         # try included here, so we can't crash the page
         try:
             # there are situations where we won't have a tracking number yet
-            identity, user = get_identity_and_user(user_or_request) or 'unknown'
+            identity, user = get_identity_and_user(user_or_request)
+        except ValueError:
+            identity = 'unknown'
+            user = None
 
-            models.Events.objects.create(
-                action=self.name,
-                data=self.data,
-                identity=identity,
-                type=self.action,
-                user=user,
-            )
-        except:
-            log.exception('Failed to record async event')
+        models.Events.objects.create(
+            action=self.name,
+            data=self.data,
+            identity=identity,
+            type=self.action,
+            user=user,
+        )
 
 class KMWrapper(KM):
     """
@@ -128,10 +129,10 @@ def get_identity_and_user(user_or_request):
         user = user_or_request
         identity = user_or_request.id
     else:
-        raise Exception('Invalid object passed into get_kiss_instance, should be request or user, but was %s' % type(user_or_request))
+        raise ValueError('Invalid object passed into get_kiss_instance, should be request or user, but was %s' % type(user_or_request))
 
     if not identity:
-        raise Exception('User is required for kissmetric tracking')
+        raise ValueError('User is required for kissmetric tracking')
     return identity, user
 
 def get_kissmetrics_instance(user_or_request):
