@@ -121,8 +121,8 @@ def get_identity_and_user(user_or_request):
 
     if isinstance(user_or_request, HttpRequest):
         if user_or_request.user.is_authenticated():
-            user = user_or_request
-            identity = user_or_request.id
+            user = user_or_request.user
+            identity = user.id
         else:
             identity = get_identity_from_cookie(user_or_request)
     elif isinstance(user_or_request, User):
