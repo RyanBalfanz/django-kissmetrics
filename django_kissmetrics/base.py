@@ -73,16 +73,14 @@ class KMWrapper(KM):
 
     def track_request(self, data, type):
         if settings.KISSMETRICS_TRACK_INTERNALLY:
+            user = getattr(self, 'user')
+
             kissmetric = models.Events(
                 data=data,
                 identity=self._id,
                 type=models.KISSMETRICS_TYPE_CHOICES.KISS_TYPE[type],
+                user_id=user and user.id,
             )
-
-            user = getattr(self, 'user')
-
-            if user:
-                kissmetric.user = user
 
             if 'e' == type:
                 kissmetric.action=data['_n']
