@@ -32,7 +32,7 @@ def kissmetrics(request):
                 # associate the user with the KISS identity
                 if settings.KISSMETRICS_TRACK_INTERNALLY:
                     identity = base.get_identity_from_cookie(request)
-                    models.Events.objects.filter(identity=identity).update(user=user)
+                    models.Events.objects.filter(identity=identity).update(user_id=user.id)
 
     return {
         'identify_kiss': identify_kiss,
