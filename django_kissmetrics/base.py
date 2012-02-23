@@ -57,7 +57,7 @@ class KISSMetricTask(object):
             data=self.data,
             identity=identity,
             type=self.action,
-            user_id=user,
+            user_id=user and user.id,
         )
 
 class KMWrapper(KM):
