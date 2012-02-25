@@ -65,3 +65,5 @@ Or you can turn off tracking for a single user by adding the following property 
     user.kissmetrics_ignore = True
     get_kissmetrics_instance(user).record('this event will not record')
 
+If you are internally tracking KISSMetrics, keep in mind that the user_id on the django_kissmetrics table is not a foreign key, just an integer. This is because frequent writes can cause DB locking in MySQL, if it is a true foreign key field. You may want to wire up a pre_delete signal on User, if you want to remove tracking data for deleted users.
+
